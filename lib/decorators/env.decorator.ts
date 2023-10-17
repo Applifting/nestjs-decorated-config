@@ -85,7 +85,7 @@ export function Env<T>(
 }
 
 export const sanitizeEnvVar = <T>(
-  value: string,
+  value: string | undefined,
   typeName: string,
   removeTrailingSlash: boolean,
   defaultValue?: T | (() => T),
