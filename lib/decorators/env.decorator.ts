@@ -10,9 +10,24 @@ export const exposedRawConfigurationValuesForDebugging = new Map<
 >();
 
 type EnvVarDecoratorOptions<T = any> = {
+  /**
+   * Variable's default value, used if no other value is populated from environment. Undefined by default
+   */
   defaultValue?: T | (() => T);
+
+  /**
+   * Exposing will show the value of variable in log. False by default
+   */
   expose?: boolean;
+
+  /**
+   * Removes last string character, if it is a forward slash. False by default
+   */
   removeTrailingSlash?: boolean;
+
+  /**
+   * Parses the value to a JavaScript object with JSON.parse. Throws on invalid input. False by default
+   */
   parseJson?: boolean;
 };
 
@@ -24,6 +39,10 @@ const defaultOptions: EnvVarDecoratorOptions = {
 };
 
 export function Env<T>(
+  /**
+   * Environment variable's name
+   * @example - DATABASE_URL
+   */
   key: string,
   options: EnvVarDecoratorOptions<T> = defaultOptions,
 ): PropertyDecorator {
