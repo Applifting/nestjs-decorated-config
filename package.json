@@ -1,6 +1,6 @@
 {
   "name": "nestjs-awesome-config-module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Nest.js config module with validation using class-validator decorators",
   "author": "Applifting",
   "license": "ISC",
