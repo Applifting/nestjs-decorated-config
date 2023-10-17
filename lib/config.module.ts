@@ -20,11 +20,11 @@ export class ConfigModule {
     ConfigService: {
       new (): Record<string, any>;
     },
-    options: ConfigModuleOptions,
+    options?: ConfigModuleOptions,
   ): Promise<DynamicModule> {
     const optionsWithDefaults = {
-      printOnStartup: options.printOnStartup ?? false,
-      validate: options.validate ?? true,
+      printOnStartup: options?.printOnStartup ?? false,
+      validate: options?.validate ?? true,
     };
 
     const config = new ConfigService();
