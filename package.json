@@ -1,6 +1,6 @@
 {
   "name": "nestjs-awesome-config-module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Nest.js config module with validation using class-validator decorators",
   "author": "Applifting",
   "license": "ISC",
@@ -47,6 +47,10 @@
     "nest.js",
     "config"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://git.applifting.cz/ota.vlna/nestjs-awesome-config-module"
+  },
   "jest": {
     "moduleFileExtensions": [
       "js",
