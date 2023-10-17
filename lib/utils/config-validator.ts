@@ -1,12 +1,11 @@
 import { Injectable, Logger, LoggerService } from '@nestjs/common';
 import { validate } from 'class-validator';
-import { Config } from '../config.service';
 
 @Injectable()
 export class ConfigValidator {
   private readonly logger: LoggerService = new Logger(ConfigValidator.name);
 
-  async validate(config: Config): Promise<void> {
+  async validate(config: Record<string, any>): Promise<void> {
     this.logger.log(`Validating config...`);
 
     const errors = await validate(config);
