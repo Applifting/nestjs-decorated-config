@@ -64,15 +64,15 @@ export function Env<T>(
       envVar: key,
       propertyKey: String(propertyKey),
       rawValue: options?.expose ? env[key] : '[HIDDEN]',
-      exposed: options?.expose || false,
-      parseJson: options?.parseJson || false,
+      exposed: options?.expose ?? false,
+      parseJson: options?.parseJson ?? false,
     });
 
     // use default value if provided or sanitize
     const sanitized = sanitizeEnvVar<T>(
       env[key],
       options.parseJson ? 'JSON' : type.name,
-      options?.removeTrailingSlash,
+      options?.removeTrailingSlash ?? false,
       options?.defaultValue,
     );
 
