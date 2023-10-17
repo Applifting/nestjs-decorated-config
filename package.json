@@ -1,11 +1,14 @@
 {
   "name": "nestjs-awesome-config-module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Nest.js config module with validation using class-validator decorators",
   "author": "Applifting",
   "license": "ISC",
   "main": "index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rimraf -rf dist && tsc -p tsconfig.json",
     "format": "prettier --write \"{lib,test}/**/*.ts\"",
