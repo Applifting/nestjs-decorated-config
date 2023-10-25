@@ -50,6 +50,8 @@ export class Config {
 }
 ```
 
+#### Options
+
 @Env optionally expects `EnvDecoratorOptions` as second parameter:
 
 ```ts
