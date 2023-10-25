@@ -1,6 +1,6 @@
 {
   "name": "nestjs-decorated-config",
-  "version": "1.0.3",
+  "version": "1.0.0",
   "description": "Nest.js config module with validation using class-validator decorators",
   "author": "Applifting",
   "license": "ISC",
