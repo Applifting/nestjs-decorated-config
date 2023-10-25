@@ -16,8 +16,6 @@ $ npm i @applifting-io/nest-decorated-config
 Let's say you have the following .env file (or start your application in an environment providing those variables)
 
 ```
-# .env
-
 SECRET=WmOZI77oOQf76cM9GASDWB7tS3MZ01TPM395FCUN9oE=
 URL=http://localhost:3000
 ```
