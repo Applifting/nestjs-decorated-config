@@ -9,7 +9,7 @@ export const exposedRawConfigurationValuesForDebugging = new Map<
   }
 >();
 
-type EnvVarDecoratorOptions<T = any> = {
+type EnvDecoratorOptions<T = any> = {
   /**
    * Variable's default value, used if no other value is populated from environment. Undefined by default
    */
@@ -31,7 +31,7 @@ type EnvVarDecoratorOptions<T = any> = {
   parseJson?: boolean;
 };
 
-const defaultOptions: EnvVarDecoratorOptions = {
+const defaultOptions: EnvDecoratorOptions = {
   defaultValue: undefined,
   expose: false,
   removeTrailingSlash: false,
@@ -44,7 +44,7 @@ export function Env<T>(
    * @example - DATABASE_URL
    */
   key: string,
-  options: EnvVarDecoratorOptions<T> = defaultOptions,
+  options: EnvDecoratorOptions<T> = defaultOptions,
 ): PropertyDecorator {
   return (target: any, propertyKey: string | symbol) => {
     const env = process.env;
