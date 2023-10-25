@@ -4,11 +4,11 @@ import { ConfigValidator } from './utils/config-validator';
 
 type ConfigModuleOptions = {
   /**
-   * False by default
+   * Print all variables with `expose: true`. False by default
    */
   printOnStartup?: boolean;
   /**
-   * True by default
+   * Validate all variables using class-validator decorators. True by default
    */
   validate?: boolean;
 };
