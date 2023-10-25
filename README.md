@@ -1,6 +1,6 @@
-# NestJS Awesome Config Module
+# NestJS Decorated Config
 
-- [ ] TODO: come up with a better name
+- [x] TODO: come up with a better name
 - [ ] TODO: create docs
 
 ## Example config service

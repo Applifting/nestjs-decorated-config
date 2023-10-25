@@ -1,5 +1,5 @@
 {
-  "name": "nestjs-awesome-config-module",
+  "name": "nestjs-decorated-config",
   "version": "1.0.3",
   "description": "Nest.js config module with validation using class-validator decorators",
   "author": "Applifting",
@@ -52,7 +52,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://git.applifting.cz/ota.vlna/nestjs-awesome-config-module"
+    "url": "https://github.com/Applifting/nestjs-decorated-config"
   },
   "jest": {
     "moduleFileExtensions": [
