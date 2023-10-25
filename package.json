@@ -1,13 +1,14 @@
 {
   "name": "@applifting-io/nestjs-decorated-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Nest.js config module with validation using class-validator decorators",
   "author": "Applifting",
   "license": "ISC",
   "main": "index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "!tsconfig.tsbuildinfo"
   ],
   "scripts": {
     "build": "rimraf -rf dist && tsc -p tsconfig.json",
