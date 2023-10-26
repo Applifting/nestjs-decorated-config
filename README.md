@@ -37,7 +37,7 @@ import {
 } from 'class-validator';
 
 @Injectable()
-export class Config {
+export class ConfigService {
   @Env('URL')
   @IsUrl()
   readonly url: string;
