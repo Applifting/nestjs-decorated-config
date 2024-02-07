@@ -1,12 +1,18 @@
+import {
+  sanitizeArray,
+  sanitizeBoolean,
+  sanitizeJson,
+  sanitizeNumber,
+  sanitizeString,
+} from './sanitizers';
+
 export const exposedRawConfigurationValuesForDebugging = new Map<
   string,
   {
     envVar: string;
     propertyKey: string;
-    rawValue: string | undefined;
-    exposed: boolean;
-    parseJson: boolean;
-  }
+    rawValue: string;
+  } & EnvDecoratorOptions
 >();
 
 type EnvDecoratorOptions<T = any> = {
@@ -29,6 +35,16 @@ type EnvDecoratorOptions<T = any> = {
    * Parses the value to a JavaScript object with JSON.parse. Throws on invalid input. False by default
    */
   parseJson?: boolean;
+
+  /**
+   * Parses the value to an array using `delimiter` property. Throws on invalid input. False by default
+   */
+  parseArray?: boolean;
+
+  /**
+   * Delimiter to be used with `parseArray: true`. `,` by default
+   */
+  delimiter?: string;
 };
 
 const defaultOptions: EnvDecoratorOptions = {
@@ -36,6 +52,8 @@ const defaultOptions: EnvDecoratorOptions = {
   expose: false,
   removeTrailingSlash: false,
   parseJson: false,
+  parseArray: false,
+  delimiter: ',',
 };
 
 export function Env<T>(
@@ -60,21 +78,38 @@ export function Env<T>(
       );
     }
 
+    if (options.parseJson && options.parseArray) {
+      throw new Error(
+        `EnvVar decorator with parseJson and parseArray options cannot be used together on property ${String(
+          propertyKey,
+        )} of type ${type.name}.`,
+      );
+    }
+
+    const sanitizedOptions = {
+      expose: options?.expose ?? false,
+      removeTrailingSlash: options?.removeTrailingSlash ?? false,
+      parseJson: options?.parseJson ?? false,
+      parseArray: options?.parseArray ?? false,
+      delimiter: options?.delimiter ?? ',',
+      defaultValue: options?.defaultValue,
+    };
+
     exposedRawConfigurationValuesForDebugging.set(key, {
       envVar: key,
       propertyKey: String(propertyKey),
-      rawValue: options?.expose ? env[key] : '[HIDDEN]',
-      exposed: options?.expose ?? false,
-      parseJson: options?.parseJson ?? false,
+      rawValue: options?.expose ? env[key] ?? '' : '[HIDDEN]',
+      ...sanitizedOptions,
     });
 
+    const typeName = options.parseJson
+      ? 'JSON'
+      : options.parseArray
+      ? 'Array'
+      : type.name;
+
     // use default value if provided or sanitize
-    const sanitized = sanitizeEnvVar<T>(
-      env[key],
-      options.parseJson ? 'JSON' : type.name,
-      options?.removeTrailingSlash ?? false,
-      options?.defaultValue,
-    );
+    const sanitized = sanitizeEnvVar<T>(env[key], typeName, sanitizedOptions);
 
     Object.defineProperty(target, propertyKey, {
       get: () => sanitized,
@@ -85,44 +120,39 @@ export function Env<T>(
 }
 
 export const sanitizeEnvVar = <T>(
-  value: string | undefined,
+  raw: string | undefined,
   typeName: string,
-  removeTrailingSlash: boolean,
-  defaultValue?: T | (() => T),
-): T => {
-  let sanitized: any;
-  // use default value if provided or sanitize
-  if (value === undefined || value === '') {
-    if (defaultValue !== undefined) {
-      if (typeof defaultValue === 'function') {
-        sanitized = (defaultValue as () => T)();
-      } else {
-        sanitized = defaultValue;
-      }
+  options: {
+    delimiter: string;
+    removeTrailingSlash: boolean;
+    defaultValue?: T | (() => T);
+  },
+): T | undefined => {
+  const value = raw ?? applyDefaultValue(options.defaultValue);
+  switch (typeName) {
+    case 'String':
+      return sanitizeString(value, options.removeTrailingSlash) as T;
+    case 'Number':
+      return sanitizeNumber(value) as T;
+    case 'Boolean':
+      return sanitizeBoolean(value) as T;
+    case 'JSON':
+      return sanitizeJson(value) as T;
+    case 'Array':
+      return sanitizeArray(value, options.delimiter) as T;
+    default:
+      return value;
+  }
+};
+
+function applyDefaultValue<T>(defaultValue: T | (() => T) | undefined): any {
+  if (defaultValue !== undefined) {
+    if (typeof defaultValue === 'function') {
+      return (defaultValue as () => T)();
     } else {
-      sanitized = undefined;
+      return defaultValue;
     }
   } else {
-    switch (typeName) {
-      case 'String':
-        sanitized = value;
-        if (removeTrailingSlash && sanitized && sanitized.endsWith('/')) {
-          sanitized = sanitized.slice(0, -1);
-        }
-        break;
-      case 'Number':
-        sanitized = Number(value);
-        break;
-      case 'Boolean':
-        sanitized = value === 'true';
-        break;
-      case 'JSON':
-        sanitized = typeof value === 'string' ? JSON.parse(value) : value;
-        break;
-      default:
-        sanitized = value;
-    }
+    return undefined;
   }
-
-  return sanitized;
-};
+}
