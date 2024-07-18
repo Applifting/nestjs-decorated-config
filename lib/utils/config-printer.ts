@@ -11,8 +11,8 @@ export class ConfigPrinter {
       this.logger.log({
         key: value.propertyKey,
         envVar: value.envVar,
-        rawValue: value.exposed ? value.rawValue : '[HIDDEN]',
-        sanitizedValue: value.exposed ? config[value.propertyKey] : '[HIDDEN]',
+        rawValue: value.expose ? value.rawValue : '[HIDDEN]',
+        sanitizedValue: value.expose ? config[value.propertyKey] : '[HIDDEN]',
       });
     });
   }

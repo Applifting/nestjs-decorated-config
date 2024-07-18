@@ -105,8 +105,8 @@ export function Env<T>(
     const typeName = options.parseJson
       ? 'JSON'
       : options.parseArray
-      ? 'Array'
-      : type.name;
+        ? 'Array'
+        : type.name;
 
     // use default value if provided or sanitize
     const sanitized = sanitizeEnvVar<T>(env[key], typeName, sanitizedOptions);
