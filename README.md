@@ -7,9 +7,8 @@ Environment variable configuration module for [Nest.js](https://github.com/nestj
 ## Installation
 
 ```bash
-$ npm i @applifting-io/nest-decorated-config
+$ npm i @applifting-io/nestjs-decorated-config
 ```
-
 
 ## Usage
 
@@ -28,13 +27,9 @@ Optionally decorate your properties with class-validator decorators.
 
 ```ts
 // config.service.ts
-
 import { Env } from '@applifting-io/nestjs-decorated-config';
 import { Injectable } from '@nestjs/common';
-import {
-  IsNotEmpty,
-  IsUrl,
-} from 'class-validator';
+import { IsNotEmpty, IsUrl } from 'class-validator';
 
 @Injectable()
 export class ConfigService {
@@ -45,6 +40,34 @@ export class ConfigService {
   @Env('SECRET')
   @IsNotEmpty()
   readonly secret: string;
+
+  @Env('BOOLEAN_VAR', {
+    defaultValue: true, // will use true if no other value is populated from environment
+  })
+  readonly booleanVar: boolean;
+
+  @Env('ARRAY_VAR', {
+    delimiter: '|', // will use comma as a delimiter for the array ("," is the default delimiter)
+    parseArray: true, // will parse the array from string to array of strings
+  })
+  readonly arrayVar: string[];
+
+  @Env('NUMBER_VAR', {
+    defaultValue: 42, // will use 42 if no other value is populated from environment
+  })
+  readonly numberVar: number;
+
+  @Env('JSON_VAR', {
+    parseJson: true, // will parse stringified JSON object
+  })
+  readonly jsonVar: {
+    key: string;
+  };
+
+  @Env('EXPOSED_VAR', {
+    expose: true, // will print the value of this variable in the console on startup
+  })
+  readonly exposedVar: string;
 }
 ```
 
@@ -82,15 +105,12 @@ Import and add ConfigModule to imports array of your root module.
 
 ```ts
 // app.module.ts
-
 import { ConfigModule } from '@applifting-io/nestjs-decorated-config';
 import { Module } from '@nestjs/common';
-import { ConfigService } from 'config.service.ts'
+import { ConfigService } from 'config.service.ts';
 
 @Module({
-  imports: [
-    ConfigModule.forRootAsync(ConfigService)
-  ]
+  imports: [ConfigModule.forRootAsync(ConfigService)],
 })
 export class AppModule {}
 ```
@@ -122,10 +142,15 @@ ConfigService is available globally, inject it like any other provider
 @Injectable()
 export class ExampleService {
   constructor(private readonly config: ConfigService) {}
-  
+
   example() {
     console.log(config.url); // => 'http://localhost:3000'
     console.log(config.secret); // => 'WmOZI77oOQf76cM9GASDWB7tS3MZ01TPM395FCUN9oE='
+    console.log(config.booleanVar); // => true
+    console.log(config.arrayVar); // => ['value1', 'value2']
+    console.log(config.numberVar); // => 42
+    console.log(config.jsonVar); // => { key: 'value' }
+    console.log(config.exposedVar); // => 'value'
   }
 }
 ```
@@ -140,7 +165,6 @@ One way to achieve this in practice is to run dotenv and then dynamically import
 
 ```ts
 // main.ts
-
 import * as dotenv from 'dotenv';
 
 // Dotenv needs to run before importing bootstrap, because @Env decorators are
@@ -150,4 +174,3 @@ dotenv.config();
 
 import('./bootstrap').then(({ bootstrap }) => bootstrap());
 ```
-
