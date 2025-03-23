@@ -1,6 +1,6 @@
 {
   "name": "@applifting-io/nestjs-decorated-config",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Nest.js config module with validation using class-validator decorators",
   "author": "Applifting",
   "license": "ISC",
