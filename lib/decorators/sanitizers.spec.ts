@@ -99,5 +99,11 @@ describe('sanitizers', () => {
 
       expect(result).toEqual([]);
     });
+
+    it('should return default value', () => {
+      const result = sanitizeArray(['defaultValue'], ',');
+
+      expect(result).toEqual(['defaultValue']);
+    });
   });
 });
