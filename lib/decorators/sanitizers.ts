@@ -16,14 +16,16 @@ export function sanitizeBoolean(value: string | undefined): boolean {
   return value === 'true';
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function sanitizeJson(value: any): any {
   return typeof value === 'string' ? JSON.parse(value) : value;
 }
 
 export function sanitizeArray(
-  value: string | undefined,
+  value: string | string[] | undefined,
   delimiter: string,
 ): string[] {
-  if (value === undefined) return [];
-  return value.split(delimiter).map((v) => v.trim());
+  return typeof value === 'string'
+    ? value.split(delimiter).map((v) => v.trim())
+    : value ?? [];
 }
