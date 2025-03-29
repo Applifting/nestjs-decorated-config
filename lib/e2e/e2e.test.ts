@@ -39,7 +39,8 @@ class MockConfig {
 
   @Env('ARRAY_WITH_DEFAULT_VALUE', {
     parseArray: true,
-    defaultValue: ['defaultValue'],
+    delimiter: ',',
+    defaultValue: ['defaultValue', 'defaultValue2'],
   })
   arrayWithDefaultValue: string[];
 
